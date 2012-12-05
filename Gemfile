@@ -9,6 +9,8 @@ gem 'therubyracer'
 gem 'coffee-script'
 gem 'sass'
 gem 'uglifier'
+gem 'em-websocket'
+gem 'json'
 
 group :development, :test do
   gem 'jasmine'

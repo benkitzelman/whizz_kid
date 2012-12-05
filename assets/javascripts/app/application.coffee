@@ -4,3 +4,4 @@ class App.Application
     @router = new App.Router
     Backbone.history.start()
     console.log 'ready to go...'
+    App.Socket.connect()
