@@ -1,30 +1,38 @@
 module WhizzKid
   module Observers
     class BaseObserver
+      attr_reader :socket
+
       def initialize(web_socket)
         @socket = web_socket
       end
 
+      # from whizz_kid
+      def update(event)
+      end
+
+      # from socket
       def on_open
-        puts "OBSERVER OPEN"
+        puts 'new client connection'
+        on_client_joined if respond_to?(:on_client_joined)
       end
 
       def on_close
-        puts "OBSERVER CLOSED"
+        puts 'client connection closed'
+        on_client_left if respond_to?(:on_client_left)
       end
 
       def on_message(msg)
-        puts "OBSERVER MSG: #{msg}"
+        @last_message = msg
+        on_client_message(last_message) if respond_to?(:on_client_message)
+      end
+
+      def last_message
+        @last_message.split(':').map {|chunk| chunk.downcase.to_sym}
       end
 
       def self.inherited(subclass)
-        WhizzKid::Notifier.register_observer(subclass)
-      end
-    end
-
-    class GameObserver < BaseObserver
-      def on_message(msg)
-        puts "GAME OBSERVER MSG: #{msg}"
+        Notifier.register_observer(subclass)
       end
     end
   end
