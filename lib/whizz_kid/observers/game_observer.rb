@@ -11,7 +11,7 @@ module WhizzKid
         puts "Client sent to GAME: #{message.inspect}"
       end
 
-      def update event
+      def on_service_message event
         puts "GAME sent to client: #{event}"
         @socket.send event
       end

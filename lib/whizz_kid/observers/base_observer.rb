@@ -9,6 +9,7 @@ module WhizzKid
 
       # from whizz_kid
       def update(event)
+        on_service_message event if respond_to?(:on_service_message)
       end
 
       # from socket
