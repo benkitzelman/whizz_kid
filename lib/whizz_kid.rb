@@ -1,31 +1,27 @@
 module WhizzKid
   def self.start
     EventMachine.run {
+      @game_channel = EventMachine::Channel.new
+      @game         = WhizzKid::Game.start(@game_channel)
+
       EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080) do |ws|
 
-        observer_instances = observers.map {|ob| ob.new(ws)}
-
         ws.onopen {
-          observer_instances.each(&:on_open)
-          @game ||= WhizzKid::Game.start
+          sid = @game_channel.subscribe {|msg| ws.send msg}
+          ws.send 'game:started'
         }
 
         ws.onclose {
-          observer_instances.each(&:on_close)
+          @game_channel.unsubscribe(sid)
         }
 
         ws.onmessage { |msg|
-          observer_instances.each {|observer| observer.on_message msg}
+          case msg
+          when /game:join:(.+)/
+            @game.join_or_create_round $1
+          end
         }
       end
     }
-  end
-
-  def self.observers
-    @observers ||= []
-  end
-
-  def self.register_observer(klass)
-    observers << klass
   end
 end

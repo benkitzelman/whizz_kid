@@ -25,11 +25,12 @@ module WhizzKid
     end
 
     def start_questions
-      @session = nil if @session && @session.status == false
-      @session ||= Thread.new {
-        questions.each do |question|
+      round_questions = questions
+      @session = EM.add_periodic_timer(5) {
+        if question = round_questions.shift
           notify "round:question:#{question[:id]}:#{question[:question]}"
-          sleep 5
+        else
+          EM.cancel_timer @session
         end
       }
     end
