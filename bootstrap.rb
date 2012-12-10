@@ -14,7 +14,7 @@ require 'lib/bootstrap'
 require 'lib/whizz_kid'
 require 'app/controllers/base_controller'
 [
-  'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers', 'lib/whizz_kid/models', 'lib/whizz_kid/observers'
+  'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers', 'lib/whizz_kid/models', 'lib/whizz_kid/models/observers'
 ].each do |folder|
   Dir["#{folder}/*.rb"].each {|file| require file }
 end

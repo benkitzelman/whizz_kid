@@ -4,6 +4,7 @@ module WhizzKid
       attr_reader :socket
 
       def initialize(web_socket)
+        Game.instance.attach self
         @socket = web_socket
       end
 

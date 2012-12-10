@@ -1,5 +1,17 @@
 module WhizzKid
   class Round < BaseObservable
+    STATE_READY = :ready
+    STATE_RUNNING = :running
+
+    def id
+      123
+    end
+
+    def initialize(observers, contest)
+      @contest = contest
+      super observers
+    end
+
     def questions
       [
         'what is the capital of turkey?',
@@ -8,11 +20,18 @@ module WhizzKid
       ]
     end
 
+    def state
+      @session.nil? ? STATE_READY : STATE_RUNNING
+    end
+
     def start_questions
-      Thread.new {
+      @session = nil if @session && @session.status == false
+      @session ||= Thread.new {
+        puts "STARTING QUESTIONS"
         questions.each do |question|
-          sleep 10
           notify "round:question:#{question}"
+          puts "SENT #{question} to #{observers.inspect}"
+          sleep 5
         end
       }
     end

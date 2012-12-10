@@ -1,5 +1,16 @@
 module WhizzKid
   class BaseObservable
+    attr_reader :state
+
+    def initialize(observers = nil)
+      @observers = observers
+      @state = 'pre-init'
+    end
+
+    def notify(message)
+      socket.send message
+    end
+
     def observers
       @observers ||= []
     end
