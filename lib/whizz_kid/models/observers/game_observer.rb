@@ -15,7 +15,6 @@ module WhizzKid
           Game.instance.join_or_create_round message[2]
         end
       end
-
     end
   end
 end
