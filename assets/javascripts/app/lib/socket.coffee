@@ -19,7 +19,7 @@ class App.Socket
 
     @_ws.onopen = =>
       @debug "connected..."
-      @_ws.send "game:state"
+      @_ws.send "game:join"
     this
 
   disconnect: ->

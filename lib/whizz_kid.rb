@@ -1,4 +1,4 @@
-module Notifier
+module WhizzKid
   def self.start
     EventMachine.run {
       EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080) do |ws|
@@ -7,7 +7,7 @@ module Notifier
 
         ws.onopen {
           observer_instances.each(&:on_open)
-          @game ||= WhizzKid::Game.start ws
+          @game ||= WhizzKid::Game.start
         }
 
         ws.onclose {

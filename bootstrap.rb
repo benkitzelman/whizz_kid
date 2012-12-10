@@ -11,7 +11,7 @@ require 'sinatra'
 require 'sinatra/url_for'
 require 'coffee-script'
 require 'lib/bootstrap'
-require 'lib/notifier'
+require 'lib/whizz_kid'
 require 'app/controllers/base_controller'
 [
   'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers', 'lib/whizz_kid/models', 'lib/whizz_kid/observers'

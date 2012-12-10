@@ -28,12 +28,16 @@ module WhizzKid
         on_client_message(last_message) if respond_to?(:on_client_message)
       end
 
+      def send_message(msg)
+        @socket.send msg
+      end
+
       def last_message
         @last_message.split(':').map {|chunk| chunk.downcase.to_sym}
       end
 
       def self.inherited(subclass)
-        Notifier.register_observer(subclass)
+        WhizzKid.register_observer(subclass)
       end
     end
   end
