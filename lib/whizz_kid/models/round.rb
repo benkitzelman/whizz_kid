@@ -2,14 +2,16 @@ module WhizzKid
   class Round < BaseObservable
     STATE_READY = :ready
     STATE_RUNNING = :running
+    attr_reader :contest, :score
 
     def id
       123
     end
 
-    def initialize(observers, contest)
+    def initialize(contest)
       @contest = contest
-      super observers
+      reset
+      super EventMachine::Channel.new
     end
 
     def questions
@@ -26,13 +28,32 @@ module WhizzKid
 
     def start_questions
       round_questions = questions
-      @session = EM.add_periodic_timer(5) {
+      @session ||= EM.add_periodic_timer(5) {
         if question = round_questions.shift
           notify "round:question:#{question[:id]}:#{question[:question]}"
         else
-          EM.cancel_timer @session
+          reset
         end
       }
+    end
+
+    def reset
+      puts "INITIALIZING ROUND #{@contest}"
+      EM.cancel_timer @session
+      @score    = 0
+      @session  = nil
+    end
+
+    def answer question_id, answer
+      return unless question = questions.find {|q| q[:id] == question_id.to_i}
+
+      if question[:answer].downcase == answer.downcase
+        @score += 1
+        notify "game:score:#{@score}"
+        true
+      else
+        false
+      end
     end
   end
 end

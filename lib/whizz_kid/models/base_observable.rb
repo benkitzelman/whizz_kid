@@ -11,6 +11,14 @@ module WhizzKid
       @channel
     end
 
+    def subscribe(socket)
+      @channel.subscribe {|msg| socket.send msg}
+    end
+
+    def unsubscribe(sid)
+      @channel.unsubscribe sid
+    end
+
     def notify(message)
       @channel.push message
     end

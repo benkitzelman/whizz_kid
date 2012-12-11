@@ -18,13 +18,30 @@ module WhizzKid
       self
     end
 
-    def join_or_create_round(contest)
-      puts "JOINING ROUND"
-
-      @round ||= Round.new(channel, contest)
-      @round.start_questions
-      notify "game:joined:#{@round.id}"
+    def rounds
+      @rounds ||= []
     end
 
+    def round_for(contest)
+      rounds.find {|r| r.contest == contest}
+    end
+
+    def join_or_create_round(contest, ws)
+      unless round = round_for(contest)
+        puts "CREATING ROUND: #{contest}"
+        round = Round.new(contest)
+        @rounds << round
+      end
+
+      puts "JOINING ROUND #{contest}"
+      round.subscribe ws
+      round.start_questions
+      round
+    end
+
+    def unsubscribe ws
+      rounds.each{|r| r.unsubscribe ws}
+      super ws
+    end
   end
 end

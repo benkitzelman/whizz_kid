@@ -9,4 +9,4 @@ class App.Round extends App.SocketObserver
 
   onQuestion: (msg) ->
     id = msg[2]
-    @sendMessage "round:#{@id}:question:#{id}:answer:test"
+    @sendMessage "round:#{@id}:question:#{id}:answer:canberra"
