@@ -20,7 +20,7 @@ module WhizzKid
     end
 
     def notify(message)
-      @channel.push message
+      @channel.push message.to_json
     end
   end
 end

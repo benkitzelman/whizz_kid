@@ -14,7 +14,7 @@ module WhizzKid
       @channel = channel
       @state = STATE_STARTED
 
-      notify "game:#{@state}"
+      notify Presenters::GameUpdate.new(self).as_hash
       self
     end
 
@@ -22,26 +22,28 @@ module WhizzKid
       @rounds ||= []
     end
 
-    def round_for(contest)
-      rounds.find {|r| r.contest == contest}
+    def round_for(subject)
+      rounds.find {|r| r.subject['name'] == subject['name']}
     end
 
-    def join_or_create_round(contest, ws)
-      unless round = round_for(contest)
-        puts "CREATING ROUND: #{contest}"
-        round = Round.new(contest)
+    def join_or_create_round(subject, player, team)
+      unless round = round_for(subject)
+        puts "CREATING ROUND: #{subject.inspect}"
+        round = Round.new(subject)
         @rounds << round
       end
 
-      puts "JOINING ROUND #{contest}"
-      round.subscribe ws
+      puts "JOINING ROUND #{subject.inspect}"
+      round.register_player player, team
       round.start_questions
       round
     end
 
-    def unsubscribe ws
-      rounds.each{|r| r.unsubscribe ws}
-      super ws
+    def player_connected ws
+      player = WhizzKid::Player.new(ws)
+      player.channel_subscriptions << {channel: channel, sid: subscribe(ws)}
+      player
     end
+
   end
 end

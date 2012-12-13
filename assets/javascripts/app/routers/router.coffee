@@ -4,4 +4,5 @@ class App.Router extends Backbone.Router
     '': 'home'
 
   home: ->
-    console.log 'loading home route'
+    view = new App.Views.GameView(model: window.app.game)
+    $('body').html view.render().el

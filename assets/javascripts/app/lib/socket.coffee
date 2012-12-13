@@ -23,8 +23,8 @@ class App.Socket
     listener.setSocket(@_ws) for listener in @listeners()
 
     @_ws.onmessage = (evt) =>
-      data = evt.data.split(':')
-      listener.onServiceMessage?(data, evt) for listener in @listeners()
+      message = JSON.parse evt.data
+      listener.onServiceMessage?(message.command.split(':'), message.data, evt) for listener in @listeners()
 
     @_ws.onclose = =>
       @debug "socket closed"

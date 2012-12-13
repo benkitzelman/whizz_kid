@@ -2,6 +2,7 @@ $LOAD_PATH << File.dirname(__FILE__)
 
 require 'rubygems'
 require 'bundler/setup'
+require 'json'
 
 if ENV['RACK_ENV'] == 'test'
   require 'rack/test'
@@ -14,7 +15,7 @@ require 'lib/bootstrap'
 require 'lib/whizz_kid'
 require 'app/controllers/base_controller'
 [
-  'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers', 'lib/whizz_kid/models'
+  'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers', 'lib/whizz_kid/models', 'lib/whizz_kid/models/presenters'
 ].each do |folder|
   Dir["#{folder}/*.rb"].each {|file| require file }
 end
