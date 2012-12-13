@@ -15,6 +15,10 @@ class App.Game extends App.SocketObserver
       when 'joined'   then @createRound(data)
       when 'score'    then @updateScore(msg)
 
+  onServiceError: (error) ->
+    if /no-rounds/.test(error.error)
+      @trigger 'no-rounds', this
+
   onServiceConnection: ->
 
   onServiceClosed: ->

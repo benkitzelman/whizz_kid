@@ -1,7 +1,8 @@
 module WhizzKid
   class Round < BaseObservable
-    STATE_READY = :ready
-    STATE_RUNNING = :running
+    STATE_READY     = :ready
+    STATE_RUNNING   = :running
+    STATE_COMPLETED = :completed
 
     QUESTION_TIMEOUT = 10
 
@@ -27,17 +28,18 @@ module WhizzKid
       ]
     end
 
-    def state
-      @session.nil? ? STATE_READY : STATE_RUNNING
-    end
-
     def start_questions
       round_questions = questions
+      @state = STATE_RUNNING
       @session ||= EM.add_periodic_timer(QUESTION_TIMEOUT) {
+        @current_question[:closed] = true if @current_question
+
         if question = round_questions.shift
           @current_question = question
           notify Presenters::RoundUpdate.new(self).as_hash('round:question')
         else
+          @state = STATE_COMPLETED
+          notify Presenters::RoundUpdate.new(self).as_hash('round:completed')
           reset
         end
       }
@@ -48,6 +50,7 @@ module WhizzKid
       EM.cancel_timer @session
       @scores   = teams.map {|t| {team: t, score: 0}}
       @session  = nil
+      @state = STATE_READY
     end
 
     def register_player player, team
@@ -75,6 +78,7 @@ module WhizzKid
 
     def answer player, question_id, answer
       return unless (question = questions.find {|q| q[:id] == question_id.to_i}) && (team = team_for(player))
+      return unless state == STATE_RUNNING && !question[:closed]
 
       if question[:answer].downcase == answer.downcase
         award_score team, 1
@@ -83,6 +87,15 @@ module WhizzKid
       else
         false
       end
+    end
+
+    # could be more than one with the same score
+    def winning_scores
+      high_score = scores.max {|score| score[:score]}[:score]
+      scores.select {|score| score[:score] == high_score}
+    end
+
+    def highest_player_score
     end
   end
 end

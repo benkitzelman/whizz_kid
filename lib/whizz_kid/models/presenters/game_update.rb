@@ -10,7 +10,7 @@ module WhizzKid
           command: command,
           data: {
             state:  @game.state,
-            question_timout: Round::QUESTION_TIMEOUT,
+            question_timeout: Round::QUESTION_TIMEOUT,
           }
         }
       end

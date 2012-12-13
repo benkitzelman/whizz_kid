@@ -1,14 +1,10 @@
 module WhizzKid
   class BaseObservable
-    attr_reader :state
+    attr_reader :state, :channel
 
     def initialize(channel = nil)
-      @channel = channel
-      @state = 'pre-init'
-    end
-
-    def channel
-      @channel
+      @channel  = channel
+      @state    = 'pre-init'
     end
 
     def subscribe(socket)

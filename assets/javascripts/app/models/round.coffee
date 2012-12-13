@@ -10,7 +10,9 @@ class App.Round extends App.SocketObserver
     @set data
 
     switch command[1]
-      when 'question' then @onQuestion(@get 'current_question')
+      when 'question'         then @onQuestion(@get 'current_question')
+      when 'answer-correct'   then @markQuestion(true)
+      when 'answer-incorrect' then @markQuestion(false)
 
   currentQuestion: ->
     _.last(@receivedQuestions) or null
@@ -21,6 +23,11 @@ class App.Round extends App.SocketObserver
     question = new App.Question({id: question.id, question: question.question}, {round: this})
     @receivedQuestions.push question
     @trigger 'question-received', this, question
+
+  markQuestion: (isCorrect) ->
+    return unless question = @currentQuestion()
+    question.set(correct: isCorrect)
+    @trigger 'question-marked', question
 
 class App.Question extends App.Model
   initialize: (attrs, options = {}) ->

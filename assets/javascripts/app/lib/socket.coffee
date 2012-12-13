@@ -24,7 +24,10 @@ class App.Socket
 
     @_ws.onmessage = (evt) =>
       message = JSON.parse evt.data
-      listener.onServiceMessage?(message.command.split(':'), message.data, evt) for listener in @listeners()
+      if message.error?
+        listener.onServiceError?(message) for listener in @listeners()
+      else
+        listener.onServiceMessage?(message.command.split(':'), message.data, evt) for listener in @listeners()
 
     @_ws.onclose = =>
       @debug "socket closed"

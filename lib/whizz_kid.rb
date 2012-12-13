@@ -18,13 +18,25 @@ module WhizzKid
 
             when /^game:join$/
               players_team  = message['data'].delete('selected_team')
-              round         = @game.join_or_create_round message['data'], player, players_team
-              player.send_message Presenters::RoundUpdate.new(round).as_hash("game:joined")
+              if round = @game.join_or_create_round(message['data'], player, players_team)
+                player.send_message Presenters::RoundUpdate.new(round).as_hash("game:joined")
+              else
+                player.send_message Presenters::Error.as_hash("game:no-rounds")
+              end
 
             when /round:([^:]+):question:([^:]+):answer:([^:]+)/
-              round = @game.rounds.find {|r| r.id == $1.to_i}
-              round.answer(player, $2, $3)
-              player.send_message Presenters::RoundUpdate.new(round).as_hash("round:answer-received")
+              round   = @game.rounds.find {|r| r.id == $1.to_i}
+              answer  = round.answer(player, $2, $3)
+              command = case answer
+              when true
+                "round:answer-correct"
+              when false 
+                "round:answer-incorrect"
+              else
+                "round:answer-closed"
+              end
+              player.send_message Presenters::RoundUpdate.new(round).as_hash(command)
+
             end
           }
 

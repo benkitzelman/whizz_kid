@@ -30,12 +30,14 @@ module WhizzKid
       unless round = round_for(subject)
         puts "CREATING ROUND: #{subject.inspect}"
         round = Round.new(subject)
+        return if round.questions.nil? || round.questions.empty?
         @rounds << round
       end
 
       puts "JOINING ROUND #{subject.inspect}"
       round.register_player player, team
       round.start_questions
+      @state = STATE_PLAYING
       round
     end
 
