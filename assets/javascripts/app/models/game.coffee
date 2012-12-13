@@ -1,11 +1,17 @@
 class App.Game extends App.SocketObserver
 
+  initialize: (args...) ->
+    @teams = [{id: 'manu', name: 'Manchester United'}, {id: 'ars', name: 'Arsenal'}]
+    @state = 'uninitialized'
+    super args...
+
   onServiceMessage: (command, data, msg) ->
     return unless command[0] == 'game'
     console.log 'GAME message from server', msg
 
     switch command[1]
-      when 'ready'    then @joinRound()
+      when 'ready'    then @set(data)
+      when 'update'   then @set(data)
       when 'joined'   then @createRound(data)
       when 'score'    then @updateScore(msg)
 
@@ -14,15 +20,15 @@ class App.Game extends App.SocketObserver
   onServiceClosed: ->
 
   joinRound: ->
-    subject = {teams:[{id: 'manu', name: 'Manchester United'}, {id: 'ars', name: 'Arsenal'}]}
+    return unless @selectedTeam?
+
+    subject = {teams: @teams}
     stubbedContests = ['my-contest', 'my-contest-2', 'my-contest-3', 'my-contest-4']
     stubbedContests = ['my-contest']
 
     name         = stubbedContests[Date.now() % stubbedContests.length]
-    selectedTeam = subject.teams[Date.now() % subject.teams.length]
-    roundSubject = _.extend subject, {name: name, selected_team: selectedTeam}
+    roundSubject = _.extend subject, {name: name, selected_team: @selectedTeam}
 
-    console.log "SELECTED TEAM:", selectedTeam
     @sendMessage "game:join", roundSubject
 
   createRound: (roundData)->

@@ -11,18 +11,61 @@ class App.Views.GameView extends App.View
 
   initialize: (options = {}) ->
     @model.on 'round-joined', @renderRound, this
+    @model.on 'change:state', @onStateChange, this
     super options
 
   render: ->
     @$el.html @template()
-    @renderRound()
+    if @model.selectedTeam?
+      @renderRound()
+    else
+      @renderTeamPrompt()
     this
 
   renderRound: ->
     return unless @model?.currentRound?
 
-    @roundView = new App.Views.RoundView(model: @model.currentRound)
+    @roundView = new App.Views.RoundView(model: @model.currentRound, game: @model)
     @$el.append @roundView.render().el
+
+  renderTeamPrompt: ->
+    @teamView = new App.Views.TeamPromptView(collection: @model.teams)
+    @teamView.on 'team-selected', @onTeamSelected, this
+    @$el.append @teamView.render().el
+
+  onStateChange: ->
+    @model.get('state') == 'ready'
+
+  onTeamSelected: (teamId) ->
+    return unless team = _.detect(@model.teams, (t)-> t.id == teamId)
+    @model.selectedTeam = team
+    console.log 'SELECTED:', @model.selectedTeam
+    @model.joinRound()
+    @teamView.remove()
+
+class App.Views.TeamPromptView extends App.View
+  template: _.template '''
+  <p>Who do you support?</p>
+  <form class='teams' />
+  '''
+
+  teamTemplate: _.template '''
+  <div class='team'>
+    <input type='radio' name='team' value='<%= id %>'/>
+    <label><%= name %></label>
+  </div>
+  '''
+
+  events:
+    'click input' : 'onTeamClicked'
+
+  render: ->
+    @$el.html @template(@collection)
+    @$('.teams').append(@teamTemplate(team)) for team in @collection
+    this
+
+  onTeamClicked: ->
+    @trigger 'team-selected', @$("input[@name=team]:checked").val()
 
 class App.Views.RoundView extends App.View
   template: _.template '''
@@ -33,19 +76,23 @@ class App.Views.RoundView extends App.View
 
   scoreTemplate: _.template '''
   <div class='score'>
-    <label><%= team.name %></label>
+    <label><%= team.name %> <% if(isUsersTeam) {%> (your team)<% } %></label>
     <span><%= score || 0 %></span>
   </div>
   '''
 
   initialize: (options = {}) ->
     super options
+    @game = options.game
     @model?.on 'question-received', @renderQuestion, this
     @model?.on 'change:scores', @render, this
 
+  scoreContextFor: (score) ->
+    _.extend score, {isUsersTeam: score.team.id == @game.selectedTeam.id}
+
   render: ->
     @$el.html @template(@model.toJSON())
-    @$('.scores').append(@scoreTemplate(score)) for score in @model.get('scores')
+    @$('.scores').append(@scoreTemplate(@scoreContextFor score)) for score in @model.get('scores')
     @renderQuestion()
     this
 
