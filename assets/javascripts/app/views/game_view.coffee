@@ -82,7 +82,7 @@ class App.Views.RoundView extends App.View
   scoreTemplate: _.template '''
   <div class='score'>
     <label><%= team.name %> <% if(isUsersTeam) {%> (your team)<% } %></label>
-    <span><%= score || 0 %></span>
+    <span><%= total || 0 %></span>
   </div>
   '''
 

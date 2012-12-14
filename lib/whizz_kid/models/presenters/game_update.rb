@@ -6,6 +6,7 @@ module WhizzKid
       end
 
       def as_hash(command = "game:update")
+        return if @game.nil?
         {
           command: command,
           data: {

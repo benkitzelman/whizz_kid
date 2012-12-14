@@ -1,9 +1,10 @@
 module WhizzKid
   class Player
-    attr_reader :socket, :channel_subscriptions
+    attr_reader :socket, :channel_subscriptions, :name
 
-    def initialize(socket)
+    def initialize(socket, name = 'anonymous')
       @socket = socket
+      @name   = name
       @channel_subscriptions = []
     end
 

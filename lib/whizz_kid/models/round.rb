@@ -48,9 +48,9 @@ module WhizzKid
     def reset
       puts "INITIALIZING ROUND #{@subject}"
       EM.cancel_timer @session
-      @scores   = teams.map {|t| {team: t, score: 0}}
+      @scores   = teams.map {|t| TeamScore.new(t) }
       @session  = nil
-      @state = STATE_READY
+      @state    = STATE_READY
     end
 
     def register_player player, team
@@ -71,17 +71,12 @@ module WhizzKid
       rec[:team]
     end
 
-    def award_score(team, val)
-      score = scores.find {|s| s[:team] == team}
-      score[:score] += val
-    end
-
     def answer player, question_id, answer
-      return unless (question = questions.find {|q| q[:id] == question_id.to_i}) && (team = team_for(player))
+      return unless question = questions.find {|q| q[:id] == question_id.to_i}
       return unless state == STATE_RUNNING && !question[:closed]
 
       if question[:answer].downcase == answer.downcase
-        award_score team, 1
+        award_score_for question, player, 1
         notify Presenters::RoundUpdate.new(self).as_hash
         true
       else
@@ -89,13 +84,28 @@ module WhizzKid
       end
     end
 
-    # could be more than one with the same score
+    def award_score_for(question, player, val)
+      team        = team_for player
+      team_score  = scores.find {|s| s.team == team}
+      team_score.award player, question, val
+    end
+
+    def score_for team
+      team        = team_for player
+      team_score  = scores.find {|s| s.team == team}
+    end
+
+    # could be more than one team with the same score
     def winning_scores
-      high_score = scores.max {|score| score[:score]}[:score]
-      scores.select {|score| score[:score] == high_score}
+      high_score = scores.max{|score| score.total}.total
+      scores.select {|score| score.total == high_score}
     end
 
     def highest_player_score
+      scores.reduce({player: nil, total: 0}) do |highest_scorer, team_score|
+        scorer = team_score.highest_scorer
+        (scorer[:total] > highest_scorer[:total]) ? scorer : highest_scorer
+      end
     end
   end
 end

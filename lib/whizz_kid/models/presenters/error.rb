@@ -10,6 +10,7 @@ module WhizzKid
       end
 
       def as_hash
+        return if @message.nil?
         {
           error: @message
         }

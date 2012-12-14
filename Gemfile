@@ -13,6 +13,7 @@ gem 'em-websocket'
 gem 'json'
 
 group :development, :test do
+  gem 'debugger'
   gem 'jasmine'
   gem 'thin'
   gem 'rack-asset-compiler'
