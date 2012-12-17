@@ -26,11 +26,17 @@ module WhizzKid
       rounds.find {|r| r.subject['name'] == subject['name']}
     end
 
+    def can_service(subject)
+      round = Round.new(subject)
+      !round.questions.nil? && !round.questions.empty?
+    end
+
     def join_or_create_round(subject, player, team)
       unless round = round_for(subject)
+        return unless can_service(subject)
+
         puts "CREATING ROUND: #{subject.inspect}"
         round = Round.new(subject)
-        return if round.questions.nil? || round.questions.empty?
         @rounds << round
       end
 

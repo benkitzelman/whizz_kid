@@ -3,7 +3,7 @@ module WhizzKid
     attr_reader :state, :channel
 
     def initialize(channel = nil)
-      @channel  = channel
+      @channel  = channel ||= Channel.new
       @state    = 'pre-init'
     end
 

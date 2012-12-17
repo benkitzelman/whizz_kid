@@ -37,7 +37,7 @@ module WhizzKid
         return if route.nil?
 
         response  = self.instance_exec(*params, &route[:action])
-        player.send_message response
+        player.send_message(command: @message['command'], data: response)
       end
     end
   end
