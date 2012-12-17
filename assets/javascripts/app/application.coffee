@@ -6,11 +6,11 @@ class App.Application
     window.app = this
 
   start: ->
-    @router = new App.Router
     @game = new App.Game
     @game.on 'no-rounds', @_onNoRoundsForSubject, this
+    @router = new App.Router
     Backbone.history.start()
-    console.log 'ready to go...'
+    @game.canCreateRoundForSubject()
 
   _onNoRoundsForSubject: ->
     console.warn 'No questions were found for the given subject'

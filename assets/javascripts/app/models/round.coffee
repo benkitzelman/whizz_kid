@@ -2,32 +2,48 @@ class App.Round extends App.SocketObserver
 
   initialize: (args...) ->
     @receivedQuestions = []
+    @on 'change:current_question', @_onNewQuestion, this
     super args...
 
   onServiceMessage: (command, data, msg) ->
-    return unless command[0] == 'round'
-    console.log 'ROUND message from server', command, data
-    @set data
+    super command, data, msg
 
-    switch command[1]
-      when 'question'         then @onQuestion(@get 'current_question')
-      when 'answer-correct'   then @markQuestion(true)
-      when 'answer-incorrect' then @markQuestion(false)
+    return unless command[0] == 'round'
+    @set data
 
   currentQuestion: ->
     _.last(@receivedQuestions) or null
 
-  onQuestion: (question) ->
-    return unless question?
+  _onNewQuestion: ->
+    return unless question = @get('current_question')
 
     question = new App.Question({id: question.id, question: question.question}, {round: this})
+    question.on 'change:correct', @_onQuestionMarked, this
+
     @receivedQuestions.push question
     @trigger 'question-received', this, question
 
-  markQuestion: (isCorrect) ->
-    return unless question = @currentQuestion()
-    question.set(correct: isCorrect)
+  _onQuestionMarked: (question) ->
+    @assessScoreDifference()
     @trigger 'question-marked', question
+
+  teamScore: ->
+    _.find(@get('scores'), (s) -> s.isUsersTeam) ? {total: 0}
+
+  winningTeam: (fromTeams) ->
+    scores = fromTeams ? @get('scores')
+    _.max(scores, (s) -> s.total)
+
+  assessScoreDifference: ->
+    return unless team = @teamScore()
+    otherTeams = _.reject @get('scores'), ((score) -> score == team)
+    difference = (team.total - @winningTeam(otherTeams)?.total)
+
+    if difference > 1   then assessment = "small-lead"
+    if difference > 5   then assessment = "big-lead"
+    if difference < -1  then assessment = "small-loss"
+    if difference < -5  then assessment = "big-loss"
+    @set(scoreAssessment: assessment ? 'even')
 
 class App.Question extends App.Model
   initialize: (attrs, options = {}) ->
@@ -36,4 +52,6 @@ class App.Question extends App.Model
 
   answer: (answer)->
     @set(answer: answer)
-    @round.sendMessage "round:#{@round.id}:question:#{@get 'id'}:answer:#{answer}"
+    @round.sendRequest("round:#{@round.id}:question:#{@get 'id'}:answer:#{answer}")
+      .pipe (command, data, msg) =>
+        @set(correct: data)

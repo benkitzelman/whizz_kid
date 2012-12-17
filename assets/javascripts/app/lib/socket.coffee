@@ -5,6 +5,7 @@ class App.Socket
 
   constructor: (socketAddress) ->
     @address = socketAddress
+    @connected = new $.Deferred
 
   debug: (args...) ->
     console.log args...
@@ -19,6 +20,9 @@ class App.Socket
     @_listeners = _.reject @listeners(), (l) -> _.isEqual(l, listeners)
 
   connect: ->
+    if @connected.isResolved() or @connected.isRejected()
+      @connected = new $.Deferred
+
     @_ws = new WebSocket @address
     listener.setSocket(@_ws) for listener in @listeners()
 
@@ -34,11 +38,13 @@ class App.Socket
       listener.onServiceClose?() for listener in @listeners()
 
     @_ws.onopen = =>
+      @connected.resolve this
       @debug "connected..."
       listener.onServiceConnect?() for listener in @listeners()
     this
 
   disconnect: ->
+    @connected      = new $.Deferred
     @_ws.onmessage  = null
     @_ws.onclose    = null
     @_ws.onopen     = null

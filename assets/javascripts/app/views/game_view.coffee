@@ -101,6 +101,10 @@ class App.Views.RoundView extends App.View
     @model?.on 'question-marked',   @renderQuestionMark, this
     @model?.on 'change:scores',     @renderScores, this
     @model?.on 'change:state',      @onStateChange, this
+    @model?.on 'change:scoreAssessment', @onAssessmentChange, this
+
+  onAssessmentChange: ->
+    console.log @model.get('scoreAssessment')
 
   scoreContextFor: (score) ->
     _.extend score, {isUsersTeam: score.team.id == @game.selectedTeam.id}
