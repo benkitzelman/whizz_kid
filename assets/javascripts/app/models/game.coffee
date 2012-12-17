@@ -1,7 +1,7 @@
 class App.Game extends App.SocketObserver
 
   initialize: (args...) ->
-    @teams = [{id: 'manu', name: 'Manchester United'}, {id: 'ars', name: 'Arsenal'}]
+    @teams = [{id: 'team-1', name: 'Manchester United'}, {id: 'team-2', name: 'Arsenal'}]
     @state = 'uninitialized'
     super args...
 
@@ -20,7 +20,7 @@ class App.Game extends App.SocketObserver
   onServiceClosed: ->
 
   subject: ->
-    subject = {teams: @teams}
+    subject = {teams: @teams, topics: ['general', 'sport-3', 'competition-26']}
     stubbedContests = ['my-contest', 'my-contest-2', 'my-contest-3', 'my-contest-4']
     # stubbedContests = ['my-contest']
 
