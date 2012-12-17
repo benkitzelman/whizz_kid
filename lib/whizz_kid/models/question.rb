@@ -3,7 +3,7 @@ require 'uuid'
 
 module WhizzKid
   class Question
-    attr_accessor :id, :number, :question, :answer, :closed
+    attr_accessor :id, :number, :question, :answer, :closed, :options
 
     def self.list_for_topics(topics, limit = 20)
       # grab all 
@@ -38,5 +38,17 @@ module WhizzKid
       attrs.each { |k,v| send("#{k}=", v) if respond_to?("#{k}=")} unless attrs.nil?
     end
 
+    def answer
+      return @answer if @options.nil?
+
+      option = @options.find {|o| o['answer'] == true}
+
+      if option.nil?
+        puts "ERROR: No answer specified for question #{question.inspect}"
+        nil
+      else
+        option['text']
+      end
+    end
   end
 end

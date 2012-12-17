@@ -1,0 +1,10 @@
+- question: "Is this a multiple choice?"
+  options:
+    - text: "Yes"
+      answer: true
+    - text: "No"
+    - text: "Maybe"
+    - text: "Take the 5th"
+
+- question: "Spell 'sport'"
+  answer:   'sport'

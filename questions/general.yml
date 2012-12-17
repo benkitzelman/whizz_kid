@@ -1,4 +1,9 @@
 # General Sporting
-- question: What is the world's most popular sport?
-  answer: soccer
+- question: What is the world's most popular team sport?
+  options:
+    - text:   cricket
+    - text:   hockey
+    - text:   soccer
+      answer: true
+    - text:   WWE
 

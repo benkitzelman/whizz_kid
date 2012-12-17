@@ -158,10 +158,20 @@ class App.Views.RoundView extends App.View
 
 class App.Views.QuestionView extends App.View
   tagName: 'form'
-  template: _.template '''
+  textTemplate: _.template '''
   <b><%= question %></b>
   <input type='text' placeholder='Enter your answer....' />
   <button>Answer</button>
+  '''
+
+  mcTemplate: _.template '''
+  <b><%= question %></b>
+  <% for(var i=0; i< options.length; i++) { var option = options[i]; %>
+
+  <input type='radio' name='answer' value='<%= option %>' />
+  <label><%= option %></label>
+
+  <% } %>
   '''
 
   answeredTemplate: _.template '''
@@ -170,20 +180,22 @@ class App.Views.QuestionView extends App.View
   '''
 
   events:
-    'submit'        : '_onSubmit'
-    'click button'  : '_onSubmit'
+    'submit'                    : '_onSubmit'
+    'click button'              : '_onSubmit'
+    'click input[type="radio"]' : "_onSubmit"
 
   render: ->
     if @model.has('answer')
       @$el.html @answeredTemplate(@model.toJSON())
     else
-      @$el.html @template(@model.toJSON())
+      @$el.html @["#{@model.type()}Template"](@model.toJSON())
     this
 
   _onSubmit: (e) ->
     e?.preventDefault()
     e?.stopPropagation()
 
-    return unless val = @$('input').val()
+    selector = if @model.type() == 'mc' then "input[@name='answer']:checked" else 'input'
+    return unless val = @$(selector).val()
     @model.answer(val)
     @render()

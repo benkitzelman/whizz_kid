@@ -17,7 +17,7 @@ class App.Round extends App.SocketObserver
   _onNewQuestion: ->
     return unless question = @get('current_question')
 
-    question = new App.Question({id: question.id, question: question.question}, {round: this})
+    question = new App.Question(question, {round: this})
     question.on 'change:correct', @_onQuestionMarked, this
 
     @receivedQuestions.push question
@@ -49,6 +49,9 @@ class App.Question extends App.Model
   initialize: (attrs, options = {}) ->
     @round = options.round
     super attrs, options
+
+  type: ->
+    if @has('options') then 'mc' else 'text'
 
   answer: (answer)->
     @set(answer: answer)

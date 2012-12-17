@@ -20,7 +20,7 @@ class App.Game extends App.SocketObserver
   onServiceClosed: ->
 
   subject: ->
-    subject = {teams: @teams, topics: ['general', 'sport-3', 'competition-26']}
+    subject = {teams: @teams, topics: ['test']}
     stubbedContests = ['my-contest', 'my-contest-2', 'my-contest-3', 'my-contest-4']
     # stubbedContests = ['my-contest']
 

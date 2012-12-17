@@ -1,3 +1,8 @@
 # Arsenal F.C.
 - question: When was Arsenal F.C. founded?
-  answer: 1886
+  options:
+    - text:   1901
+    - text:   1912
+    - text:   1872
+    - text:   1886
+      answer: true
