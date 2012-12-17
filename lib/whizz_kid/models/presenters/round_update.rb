@@ -19,7 +19,8 @@ module WhizzKid
           state:            @round.state,
           subject:          @round.subject,
           scores:           @round.scores.map {|team_score| Presenters::TeamScore.new(team_score).as_hash },
-          current_question: @round.current_question,
+          current_question: Presenters::Question.new(@round.current_question).as_hash,
+          total_questions:  @round.questions.length,
         }
       end
 

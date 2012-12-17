@@ -11,6 +11,7 @@ gem 'sass'
 gem 'uglifier'
 gem 'em-websocket'
 gem 'json'
+gem 'uuid'
 
 group :development, :test do
   gem 'debugger'

@@ -12,6 +12,7 @@ module WhizzKid
       @subject = subject
       @players = []
       @teams   = subject['teams']
+      @question_topics = subject['topics'] || []
       reset
       super Channel.new
     end
@@ -21,18 +22,14 @@ module WhizzKid
     end
 
     def questions
-      [
-        {id: 1, question: 'what is the capital of england?',    answer: 'london'},
-        {id: 2, question: 'what is the capital of zambia?',     answer: 'lusaka'},
-        {id: 3, question: 'what is the capital of australia?',  answer: 'canberra'},
-      ]
+      @questions ||= Question.list_for_topics(@question_topics)
     end
 
     def start_questions
-      round_questions = questions
+      round_questions = questions.dup
       @state = STATE_RUNNING
       @session ||= EM.add_periodic_timer(QUESTION_TIMEOUT) {
-        @current_question[:closed] = true if @current_question
+        @current_question.closed = true if @current_question
 
         if question = round_questions.shift
           @current_question = question
@@ -46,11 +43,11 @@ module WhizzKid
     end
 
     def reset
-      puts "INITIALIZING ROUND #{@subject}"
       EM.cancel_timer @session
-      @scores   = teams.map {|t| TeamScore.new(t) }
-      @session  = nil
-      @state    = STATE_READY
+      @scores     = teams.map {|t| TeamScore.new(t) }
+      @session    = nil
+      @questions  = nil
+      @state      = STATE_READY
     end
 
     def register_player player, team
@@ -72,10 +69,10 @@ module WhizzKid
     end
 
     def answer player, question_id, answer
-      return unless question = questions.find {|q| q[:id] == question_id.to_i}
-      return unless state == STATE_RUNNING && !question[:closed]
+      return unless question = questions.find {|q| q.id == question_id}
+      return unless state == STATE_RUNNING && !question.closed
 
-      if question[:answer].downcase == answer.downcase
+      if question.answer.to_s.downcase == answer.downcase
         award_score_for question, player, 1
         notify Presenters::RoundUpdate.new(self).as_hash
         true

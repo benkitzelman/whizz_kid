@@ -16,4 +16,8 @@ module WhizzKid
       end
     }
   end
+
+  def self.root
+    File.join File.dirname(__FILE__), '../'
+  end
 end
