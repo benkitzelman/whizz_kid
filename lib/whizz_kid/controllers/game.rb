@@ -4,6 +4,7 @@ module WhizzKid
 
       command "game:join" do
         players_team  = message['data'].delete('selected_team')
+        player.name   = message['data'].delete('player_name') || 'anonymous'
         if round = game.join_or_create_round(message['data'], player, players_team)
           Presenters::RoundUpdate.new(round).as_hash[:data]
         else

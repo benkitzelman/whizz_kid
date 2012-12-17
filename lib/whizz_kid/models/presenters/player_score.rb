@@ -9,7 +9,7 @@ module WhizzKid
         return if @player_score.nil?
         {
           player:   Presenters::Player.new(@player_score[:player]).as_hash,
-          question: @player_score[:question],
+          question: Presenters::Question.new(@player_score[:question]).as_hash,
           score:    @player_score[:score],
         }
       end
