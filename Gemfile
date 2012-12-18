@@ -15,6 +15,8 @@ gem 'uuid'
 gem 'httparty'
 gem 'settingslogic'
 gem 'capistrano'
+gem 'capistrano_colors'
+gem 'rvm-capistrano'
 
 group :development, :test do
   gem 'debugger'
