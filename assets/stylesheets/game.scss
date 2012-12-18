@@ -1,0 +1,44 @@
+@import 'assets/stylesheets/base';
+.game-view {
+  padding: 10px;
+
+  header {
+    display:  none;
+  }
+
+  .subject {
+     display: none;
+  }
+
+  .team-prompt-view {
+    p {
+      font-weight:  600;
+      font-size:    20px;
+    }
+
+    input[type="radio"] {
+      
+    }
+
+    label {
+      display:  inline-block;
+      cursor:   pointer;
+    }
+  }
+
+  .scores {
+
+    .score {
+
+      label {
+        display: inline-block;
+      }
+
+      span {
+        display:      inline-block;
+        font-weight:  600;
+        color:        red;
+      }
+    }
+  }
+}

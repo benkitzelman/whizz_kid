@@ -1,9 +1,10 @@
 class App.Round extends App.SocketObserver
 
   initialize: (args...) ->
-    @receivedQuestions = []
-    @on 'change:current_question', @_onNewQuestion, this
     super args...
+    @receivedQuestions = []
+    @_onNewQuestion()
+    @on 'change:current_question', @_onNewQuestion, this
 
   onServiceMessage: (command, data, msg) ->
     super command, data, msg
@@ -44,17 +45,3 @@ class App.Round extends App.SocketObserver
     if difference < -1  then assessment = "small-loss"
     if difference < -5  then assessment = "big-loss"
     @set(scoreAssessment: assessment ? 'even')
-
-class App.Question extends App.Model
-  initialize: (attrs, options = {}) ->
-    @round = options.round
-    super attrs, options
-
-  type: ->
-    if @has('options') then 'mc' else 'text'
-
-  answer: (answer)->
-    @set(answer: answer)
-    @round.sendRequest("round:#{@round.id}:question:#{@get 'id'}:answer:#{answer}")
-      .pipe (command, data, msg) =>
-        @set(correct: data)

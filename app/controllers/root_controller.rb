@@ -1,4 +1,4 @@
-class RootController < Bootstrap::BaseController
+class RootController < WhizzKid::BaseController
   mount_assets
 
   get '/' do

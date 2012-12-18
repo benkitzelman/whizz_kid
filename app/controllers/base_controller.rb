@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/assetpack'
 
-module Bootstrap
+module WhizzKid
   class BaseController < Sinatra::Base
     set :sessions, true
     set :root, File.dirname(__FILE__)
