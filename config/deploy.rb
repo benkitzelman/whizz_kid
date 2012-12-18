@@ -123,13 +123,6 @@ end
 before 'deploy:restart', 'deploy:nginx:configure'
 after  'deploy:restart', 'deploy:tag'
 
-namespace :assets do
-  desc 'precompile assets'
-  task :precompile do
-    run "cd #{release_path} && ./bin/rake assetpack:build"
-  end
-end
-
 namespace :deploy do
   APP_RESTART_ROLE = {:roles => :app, :except => { :no_release => true }}
   APP_ROLE         = {:roles => :app}

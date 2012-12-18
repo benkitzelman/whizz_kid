@@ -19,7 +19,7 @@ gem 'capistrano_colors'
 gem 'rvm-capistrano'
 
 group :development, :test do
-  gem 'debugger'
+  # gem 'debugger'
   gem 'jasmine'
   gem 'thin'
   gem 'rack-asset-compiler'
