@@ -14,9 +14,10 @@ gem 'json'
 gem 'uuid'
 gem 'httparty'
 gem 'settingslogic'
-gem 'capistrano', '=2.12.0'
+gem 'capistrano'
 gem 'capistrano_colors'
 gem 'rvm-capistrano'
+gem 'fog'
 
 group :development, :test do
   # gem 'debugger'
