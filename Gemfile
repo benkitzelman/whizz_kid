@@ -14,7 +14,7 @@ gem 'json'
 gem 'uuid'
 gem 'httparty'
 gem 'settingslogic'
-gem 'capistrano'
+gem 'capistrano', '=2.12.0'
 gem 'capistrano_colors'
 gem 'rvm-capistrano'
 
