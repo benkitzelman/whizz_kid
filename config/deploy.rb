@@ -4,7 +4,7 @@ require 'rvm/capistrano'
 set :user,              'ubuntu'
 set :application,       'whizz_kid'
 set :scm,               :git
-set :repository,        'git@github.com:benkitzelman/whizz-kid.git'
+set :repository,        'git@github.com:benkitzelman/whizz_kid.git'
 
 set :deploy_to,         "/home/#{user}/#{application}"
 set :deploy_via,        :remote_cache
@@ -175,8 +175,7 @@ namespace :deploy do
     desc 'install nginx configs'
     task :configure, APP_ROLE do
       run  "cd #{current_path}/config/nginx && ln -sfT environments/#{stage} stage"
-      sudo "cp #{current_path}/config/nginx/tms.conf /etc/nginx/sites-enabled/#{application}.conf"
-      sudo "cp #{current_path}/config/nginx/nginx.conf /etc/nginx/"
+      sudo "cp #{current_path}/config/nginx/whizz_kid.conf /etc/nginx/sites-enabled/#{application}.conf"
     end
 
     desc 'reload nginx config'
