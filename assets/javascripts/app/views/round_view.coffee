@@ -14,7 +14,7 @@ class App.Views.RoundView extends App.View
   '''
 
   scoreTemplate: _.template '''
-  <div class='score'>
+  <div class='score' id='<%= team.id %>'>
     <label><%= team.name %> <% if(isUsersTeam) {%> (your team)<% } %></label>
     <span><%= total || 0 %></span>
   </div>
@@ -31,10 +31,10 @@ class App.Views.RoundView extends App.View
   initialize: (options = {}) ->
     super options
     @game = options.game
-    # @model?.on 'question-received', @renderQuestion, this
+    @model?.on 'question-received', @renderQuestion, this
     @model?.on 'question-marked',   @renderQuestionMark, this
     @model?.on 'change:scores',     @renderScores, this
-    # @model?.on 'change:state',      @onStateChange, this
+    @model?.on 'change:state',      @onStateChange, this
     @model?.on 'change:scoreAssessment', @onAssessmentChange, this
 
   onAssessmentChange: ->

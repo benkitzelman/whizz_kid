@@ -1,0 +1,11 @@
+development: &DEV
+  root_url:         http://localhost:7777/
+  sports_data_url:  http://sports.playupgp.com/
+  web_socket_host:  localhost
+  web_socket_port:  5555
+
+test:
+  <<: *DEV
+
+production:
+  <<: *DEV

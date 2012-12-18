@@ -1,3 +1,3 @@
 require './bootstrap'
 
-run Bootstrap::Application.new
+run WhizzKid::Web::Application.new

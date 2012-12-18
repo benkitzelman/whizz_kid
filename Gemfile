@@ -12,6 +12,9 @@ gem 'uglifier'
 gem 'em-websocket'
 gem 'json'
 gem 'uuid'
+gem 'httparty'
+gem 'settingslogic'
+gem 'capistrano'
 
 group :development, :test do
   gem 'debugger'

@@ -11,15 +11,15 @@ end
 require 'sinatra'
 require 'sinatra/url_for'
 require 'coffee-script'
-require 'lib/bootstrap'
 require 'lib/whizz_kid'
 require 'lib/whizz_kid/controllers/socket_controller'
+require 'lib/whizz_kid/web/controllers/base_controller'
 [
-  'lib', 'app', 'app/controllers', 'app/models', 'app/config/initializers', 'lib/whizz_kid/models', 'lib/whizz_kid/models/presenters', 'lib/whizz_kid/controllers'
+  'lib', 'lib/whizz_kid', 'lib/whizz_kid/web/controllers', 'lib/whizz_kid/presenters', 'lib/whizz_kid/controllers'
 ].each do |folder|
   Dir["#{folder}/*.rb"].each {|file| require file }
 end
 
-require "app/config/app_config"
-require "app/config/#{Bootstrap.environment}"
-require 'app/application'
+require "config/app_config"
+require "config/initializers/#{WhizzKid.environment}"
+require 'lib/whizz_kid/web/application'

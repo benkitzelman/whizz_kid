@@ -1,6 +1,6 @@
 class App.Socket
   @connect: ->
-    @_socket = new App.Socket("ws://localhost:8080")
+    @_socket = new App.Socket "ws://#{app_settings.web_socket_host}:#{app_settings.web_socket_port}"
     @_socket.connect()
 
   constructor: (socketAddress) ->

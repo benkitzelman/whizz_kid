@@ -24,4 +24,5 @@ class App.Views.TeamPromptView extends App.View
     this
 
   onTeamClicked: ->
-    @trigger 'team-selected', @$("input[@name=team]:checked").val()
+    _.defer =>
+      @trigger 'team-selected', @$("input[@name=team]:checked").val()

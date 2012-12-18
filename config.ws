@@ -1,4 +1,4 @@
 require './bootstrap'
 require 'em-websocket'
 
-WhizzKid.start
+WhizzKid.start_game_server

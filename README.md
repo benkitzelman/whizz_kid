@@ -1,37 +1,31 @@
-sinatra-backbone-bootstrap
+WhizzKid
 ==========================
-All the goodness of Backbone, Sinatra, Coffeescript with Jasmine and a lightweight responsive css framework (Skeleton).
-
-_GEMS_
- - Sinatra
- - Sinatra-assetpack
- - Coffee-Script
- - SASS
- - Jasmine
- - thin
-
-_JS LIBS_
- - Modernizr 2.5.3
- - BackboneJS 0.9.2
- - UnderscoreJS 1.3.3
- - JQuery 1.7.2
-
-_CSS FRAMEWORK_
- - Skeleton 1.1
+A Trivia Game using websockets, BackboneJS on Sinatra
 
 GETTING STARTED
 -------------------
+
+Start the game server:
+
+<pre>
+bundle
+ruby config.ws
+</pre>
+
+Start the web client / tile provider:
+
 <pre>
 bundle
 thin start
 </pre>
 
-JS TESTING WITH JASMINE
-------------------------
+QUESTIONS
+------------------
 
-rake jasmine - point the browser to http://localhost:8888/
+Questions are stored in yaml files in the questions folder. Each file is named by topic.
+On creation of a new round, all requested topics are matched, questions are read, shuffled, then sampled to generate
+the round's question set.
 
-sinonjs has been included for mocking / stubbing / spying as well as jasmine-jquery.
-
-Sinatra Assetpack handles coffeescript compilation on the fly, and in production, takes care of minification / uglification of js and coffeescript into 2 discrete files - vendor.js and application.js
-
+NO TESTS
+------------------
+Whoohoo! This was built at speed - tests were the first casualty... boooo.
