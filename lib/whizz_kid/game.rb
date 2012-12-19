@@ -23,7 +23,9 @@ module WhizzKid
     end
 
     def round_for(subject)
-      rounds.find {|r| r.subject['name'] == subject['name']}
+      rounds.find do |r| 
+        r.subject['name'] == subject['name'] && r.subject['topics'] == subject['topics'] && r.subject['teams'] == subject['teams']
+      end
     end
 
     def can_service(subject)
