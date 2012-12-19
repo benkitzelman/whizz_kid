@@ -1,5 +1,6 @@
 require 'httparty'
 require 'json'
+require 'uri'
 
 module WhizzKid
   class Subject
@@ -21,8 +22,9 @@ module WhizzKid
     end
 
     def game_url
-      return "#{WhizzKid.settings.root_url}?name=Game%20Trivia"
-      "#{WhizzKid.settings.root_url}?name=Game%20Trivia&topics=#{JSON.generate(topics)}&teams=#{JSON.generate(teams)}"
+      team_param = teams.map {|t| "#{t[:id]}_#{t[:name]}" }.join('__')
+      topics_param = topics.join('_')
+      "#{WhizzKid.settings.root_url}?name=Game%20Trivia&topics=#{URI.encode topics_param}&teams=#{URI.encode team_param}"
     end
 
     def title

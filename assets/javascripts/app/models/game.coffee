@@ -22,16 +22,14 @@ class App.Game extends App.SocketObserver
   teamsFromUrl: ->
     return unless match = document.location.search.match(/teams=([^&]*).*/)
 
-    teamStr = unescape match[1]
-    teamStr = teamStr.replace(/\\/g, "")
-    JSON.parse teamStr
+    teamStrs = unescape(match[1]).split('__')
+    _.map teamStrs, (teamStr) ->
+      idName = teamStr.split('_')
+      {id: idName[0], name: idName[1]}
 
   topicsFromUrl: ->
     return unless match = document.location.search.match(/topics=([^&]*).*/)
-
-    topicStr = unescape match[1]
-    topicStr = topicStr.replace(/\\/g, "")
-    JSON.parse topicStr
+    unescape(match[1]).split '_'
 
   nameFromUrl: ->
     unescape(match[1]) if match = document.location.search.match(/name=([^&]*).*/)
