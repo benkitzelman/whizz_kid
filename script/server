@@ -63,7 +63,7 @@ class ThinRunner
     cli << 'bundle exec thin start'
     cli << "-A #{app}"
     cli << "-P #{pidfile}"
-    # cli << "-R #{absolute_path('config.ru')}"
+    cli << "-R #{absolute_path('config.ru')}"
     cli << "-e #{env}"
     cli << "-p #{port}"
     cli << "-a #{host}"
