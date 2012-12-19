@@ -6,11 +6,11 @@ development: &DEV
 
 test:
   <<: *DEV
-  root_url:         http://systest.tms.playupdev.com:8282/
-  web_socket_host:  systest.tms.playupdev.com
 
 systest:
   <<: *DEV
-  
+  root_url:         http://systest.tms.playupdev.com:8282/
+  web_socket_host:  systest.tms.playupdev.com
+
 production:
   <<: *DEV
