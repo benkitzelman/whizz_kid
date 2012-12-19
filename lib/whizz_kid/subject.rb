@@ -21,6 +21,7 @@ module WhizzKid
     end
 
     def game_url
+      return "#{WhizzKid.settings.root_url}?name=Game%20Trivia"
       "#{WhizzKid.settings.root_url}?name=Game%20Trivia&topics=#{JSON.generate(topics)}&teams=#{JSON.generate(teams)}"
     end
 
