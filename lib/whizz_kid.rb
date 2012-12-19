@@ -21,7 +21,7 @@ module WhizzKid
       EventMachine.run {
         @game = WhizzKid::Game.start(Channel.new)
 
-        EventMachine::WebSocket.start(:host => WhizzKid.settings.web_socket_host, :port => WhizzKid.settings.web_socket_port) do |ws|
+        EventMachine::WebSocket.start(:host => '0.0.0.0', :port => WhizzKid.settings.web_socket_port) do |ws|
 
           ws.onopen {
             player = @game.player_connected ws
