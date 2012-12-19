@@ -12,6 +12,7 @@ require 'sinatra'
 require 'sinatra/url_for'
 require 'coffee-script'
 require 'lib/whizz_kid'
+require 'lib/whizz_kid/base_observable'
 require 'lib/whizz_kid/controllers/socket_controller'
 require 'lib/whizz_kid/web/controllers/base_controller'
 [
