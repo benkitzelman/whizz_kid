@@ -34,7 +34,7 @@ class App.Views.RoundView extends App.View
     @model?.on 'question-received', @renderQuestion, this
     @model?.on 'question-marked',   @renderQuestionMark, this
     @model?.on 'change:scores',     @renderScores, this
-    # @model?.on 'change:state',      @onStateChange, this
+    @model?.on 'change:state',      @onStateChange, this
     @model?.on 'change:scoreAssessment', @onAssessmentChange, this
 
   onAssessmentChange: ->
