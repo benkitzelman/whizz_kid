@@ -18,10 +18,10 @@ gem 'capistrano'
 gem 'capistrano_colors'
 gem 'rvm-capistrano'
 gem 'fog'
+gem 'thin'
 
 group :development, :test do
   # gem 'debugger'
   gem 'jasmine'
-  gem 'thin'
   gem 'rack-asset-compiler'
 end
