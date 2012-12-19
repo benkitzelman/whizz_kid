@@ -10,7 +10,7 @@ test:
 systest:
   <<: *DEV
   root_url:         http://systest.tms.playupdev.com:8282/
-  web_socket_host:  tmssystest-TMSELB-12REHUEL06NXT-1389627696.us-west-2.elb.amazonaws.com
+  web_socket_host:  ec2-50-112-219-61.us-west-2.compute.amazonaws.com
 
 production:
   <<: *DEV
