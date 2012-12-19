@@ -21,7 +21,7 @@ class App.Views.RoundView extends App.View
   '''
 
   resultsTemplate: _.template '''
-  <div class='rond-complete'>
+  <div class='round-complete'>
     <h3>Round Complete</h3>
     <div class='winners' />
   </div>
@@ -34,7 +34,7 @@ class App.Views.RoundView extends App.View
     @model?.on 'question-received', @renderQuestion, this
     @model?.on 'question-marked',   @renderQuestionMark, this
     @model?.on 'change:scores',     @renderScores, this
-    @model?.on 'change:state',      @onStateChange, this
+    # @model?.on 'change:state',      @onStateChange, this
     @model?.on 'change:scoreAssessment', @onAssessmentChange, this
 
   onAssessmentChange: ->

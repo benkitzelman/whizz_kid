@@ -14,8 +14,10 @@ class App.Views.QuestionView extends App.View
   <b><%= question %></b>
   <% for(var i=0; i< options.length; i++) { var option = options[i]; %>
 
-  <input type='radio' name='answer' value='<%= option %>' />
-  <label><%= option %></label>
+  <div class='options'>
+    <input type='radio' name='answer' id="<%= option %>-btn" value='<%= option %>' />
+    <label for="<%= option %>-btn" id="<%= option %>-lbl"><%= option %></label>
+  </div>
 
   <% } %>
   '''
@@ -43,5 +45,9 @@ class App.Views.QuestionView extends App.View
 
     selector = if @model.type() == 'mc' then "input[@name='answer']:checked" else 'input'
     return unless val = @$(selector).val()
-    @model.answer(val)
-    @render()
+    @$("##{val}-lbl").addClass 'selected'
+
+    _.delay =>
+      @model.answer(val)
+      @render()
+    , 500

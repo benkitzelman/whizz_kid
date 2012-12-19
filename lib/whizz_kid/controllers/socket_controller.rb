@@ -31,13 +31,19 @@ module WhizzKid
       end
 
       def dispatch(msg)
-        @message  = JSON.parse msg
+        begin
+          @message  = JSON.parse msg
 
-        route, params = route_for(message['command'])
-        return if route.nil?
+          route, params = route_for(message['command'])
+          return if route.nil?
 
-        response  = self.instance_exec(*params, &route[:action])
-        player.send_message(command: @message['command'], data: response)
+          response  = self.instance_exec(*params, &route[:action])
+          player.send_message(command: @message['command'], data: response)
+
+        rescue Exception => e
+          p e.message
+          p e.backtrace
+        end
       end
     end
   end

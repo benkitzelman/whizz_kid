@@ -11,7 +11,7 @@ class App.Views.TeamPromptView extends App.View
   teamTemplate: _.template '''
   <div class='team'>
     <input id="<%= id %>-radio" type='radio' name='team' value='<%= id %>'/>
-    <label for="<%= id %>-radio"><%= name %></label>
+    <label for="<%= id %>-radio" id='<%= id %>-lbl'><%= name %></label>
   </div>
   '''
 
@@ -24,5 +24,9 @@ class App.Views.TeamPromptView extends App.View
     this
 
   onTeamClicked: ->
-    _.defer =>
+    val = @$("input[@name=team]:checked").val()
+    @$("##{val}-lbl").addClass 'selected'
+
+    _.delay =>
       @trigger 'team-selected', @$("input[@name=team]:checked").val()
+    , 500

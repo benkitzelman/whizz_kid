@@ -3,7 +3,6 @@ class App.Round extends App.SocketObserver
   initialize: (args...) ->
     super args...
     @receivedQuestions = []
-    @_onNewQuestion()
     @on 'change:current_question', @_onNewQuestion, this
 
   onServiceMessage: (command, data, msg) ->

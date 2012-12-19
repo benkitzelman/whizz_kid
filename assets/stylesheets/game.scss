@@ -1,6 +1,10 @@
 @import 'assets/stylesheets/base';
+@import 'assets/stylesheets/_mixins';
+
+
 .game-view {
-  padding: 10px;
+  padding: 20px;
+  text-align: center;
 
   header {
     display:  none;
@@ -11,19 +15,31 @@
   }
 
   .team-prompt-view {
+
     p {
-      font-weight:  600;
       font-size:    20px;
     }
 
-    input[type="radio"] {
-      
+    .team {
+      @include radio-button;
+    }
+  }
+
+  .question-view {
+
+    b {
+      font-weight: 600;
+      font-size:   20px;
     }
 
-    label {
-      display:  inline-block;
-      cursor:   pointer;
+    .options {
+      @include radio-button;
     }
+  }
+
+  .question-result {
+    font-size:    24px;
+    font-weight:  600;
   }
 
   .scores {

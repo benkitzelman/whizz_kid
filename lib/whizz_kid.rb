@@ -24,12 +24,18 @@ module WhizzKid
         EventMachine::WebSocket.start(:host => '0.0.0.0', :port => WhizzKid.settings.web_socket_port) do |ws|
 
           ws.onopen {
-            player = @game.player_connected ws
+            begin
+              player = @game.player_connected ws
 
-            ws.onclose    { player.unsubscribe_all }
-            ws.onmessage  {|msg| WhizzKid::Controllers::Game.new(@game, player).dispatch msg }
+              ws.onclose    { player.unsubscribe_all }
+              ws.onmessage  {|msg| WhizzKid::Controllers::Game.new(@game, player).dispatch msg }
 
-            player.send_message Presenters::GameUpdate.new(@game).as_hash('game:ready')
+              player.send_message Presenters::GameUpdate.new(@game).as_hash('game:ready')
+
+            rescue Exception => e
+              puts e.message
+              p e.backtrace
+            end
           }
         end
       }

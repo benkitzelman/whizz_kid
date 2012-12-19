@@ -15,8 +15,13 @@ module WhizzKid
 
     def unsubscribe_all
       channel_subscriptions.each do |sub|
-        sub[:on_unsubscribe].call if sub[:on_unsubscribe]
-        sub[:channel].unsubscribe sub[:sid]
+        begin
+          sub[:on_unsubscribe].call if sub[:on_unsubscribe]
+          sub[:channel].unsubscribe sub[:sid]
+        rescue Exception => e
+          p e.message
+          p e.backtrace
+        end
       end
     end
   end
