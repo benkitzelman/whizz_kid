@@ -36,7 +36,7 @@ module WhizzKid
       return topics if ancestors.nil?
 
       topics += ancestors.reduce([]) {|list, ancestor| can_be_topic?(ancestor) ? (list << ancestor[':uid']) : list}
-      topics += teams[:id].map {|t| t[:id]}
+      topics += teams.map {|t| t[:id]}
       topics << @data[':uid']
       topics
     end
