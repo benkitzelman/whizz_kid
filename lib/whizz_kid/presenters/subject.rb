@@ -31,8 +31,8 @@ module WhizzKid
                 href: "http://s3-us-west-2.amazonaws.com/playup-tms/organization_1/images/question_mark.png"
               }
             ],
-            :footer_title => "",
-            :footer_subtitle => ""
+            :footer_title => "Trivia",
+            :footer_subtitle => "Mini Game"
           },
 
           :link => {
