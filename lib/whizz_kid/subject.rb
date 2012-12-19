@@ -21,7 +21,7 @@ module WhizzKid
     end
 
     def game_url
-      "#{WhizzKid.settings.root_url}?topics=#{topics.join(',')}"
+      "#{WhizzKid.settings.root_url}?name=Game%20Trivia&topics=#{JSON.generate(topics)}&teams=#{JSON.generate(teams)}"
     end
 
     def title
@@ -36,8 +36,12 @@ module WhizzKid
     end
 
     def teams
-      # TODO: Teams
-      []
+      @data['scores'].map do |s|
+        {
+          id: s['team'][':uid'],
+          name: s['team']['name']
+        }
+      end
     end
 
     def [] property

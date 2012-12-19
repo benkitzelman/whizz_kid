@@ -1,7 +1,7 @@
 class App.Game extends App.SocketObserver
 
   initialize: (args...) ->
-    @teams = [{id: 'team-1', name: 'Manchester United'}, {id: 'team-2', name: 'Arsenal'}]
+    @teams = @teamsFromUrl()
     @state = 'uninitialized'
     super args...
 
@@ -19,17 +19,30 @@ class App.Game extends App.SocketObserver
 
   onServiceClosed: ->
 
-  subject: ->
-    subject = {teams: @teams, topics: ['test']}
-    stubbedContests = ['my-contest', 'my-contest-2', 'my-contest-3', 'my-contest-4']
-    # stubbedContests = ['my-contest']
+  teamsFromUrl: ->
+    return unless match = document.location.search.match(/teams=([^&]*).*/)
 
-    name         = stubbedContests[Date.now() % stubbedContests.length]
-    _.extend subject, {name: name, selected_team: @selectedTeam}
+    teamStr = unescape match[1]
+    teamStr = teamStr.replace(/\\/g, "")
+    JSON.parse teamStr
+
+  topicsFromUrl: ->
+    return unless match = document.location.search.match(/topics=([^&]*).*/)
+
+    topicStr = unescape match[1]
+    topicStr = topicStr.replace(/\\/g, "")
+    JSON.parse topicStr
+
+  nameFromUrl: ->
+    unescape(match[1]) if match = document.location.search.match(/name=([^&]*).*/)
+
+  subject: ->
+    {name: @nameFromUrl(), topics: @topicsFromUrl(), teams: @teams, selected_team: @selectedTeam}
 
   joinRound: ->
     return unless @selectedTeam?
 
+    console.log @subject()
     @sendRequest("game:join", @subject())
       .pipe (command, data, msg) =>
         @createRound data

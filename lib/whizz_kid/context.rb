@@ -20,8 +20,7 @@ module WhizzKid
     end
 
     def is_supported?
-      type = (@params['section_type'] || '').downcase
-      type == 'contest' || type == 'competition' || type == 'team'
+      @params['subject_url'] =~ /\/contests\/(\d+)$/
     end
   end
 end
