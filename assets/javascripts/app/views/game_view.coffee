@@ -7,6 +7,7 @@ class App.Views.GameView extends App.View
   <header>
     <h1>Whizz Kid</h1>
   </header>
+  <div class='game-content' />
   '''
 
   initialize: (options = {}) ->
@@ -26,12 +27,12 @@ class App.Views.GameView extends App.View
     return unless @model?.currentRound?
 
     @roundView = new App.Views.RoundView(model: @model.currentRound, game: @model)
-    @$el.append @roundView.render().el
+    @$('.game-content').html @roundView.render().el
 
   renderTeamPrompt: ->
     @teamView = new App.Views.TeamPromptView(collection: @model.teams)
     @teamView.on 'team-selected', @onTeamSelected, this
-    @$el.append @teamView.render().el
+    @$('.game-content').html @teamView.render().el
 
   onStateChange: ->
     @model.get('state') == 'ready'

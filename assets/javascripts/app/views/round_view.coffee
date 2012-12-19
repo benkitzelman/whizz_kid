@@ -23,22 +23,28 @@ class App.Views.RoundView extends App.View
   resultsTemplate: _.template '''
   <div class='round-complete'>
     <h3>Round Complete</h3>
-    <div class='winners' />
+    <a class='play-again-btn' href='#'>Play Again</a>
+    <div class='winning-teams' />
+    <div class='mvps' />
   </div>
   '''
 
+  mvpTemplate: _.template '''
+  <h5>MVP:</h5>
+  <div><%= player.name %> (<%= total %>)</div>
+  '''
+
+  events:
+    'click a.play-again-btn' : 'onPlayAgain'
 
   initialize: (options = {}) ->
     super options
     @game = options.game
-    @model?.on 'question-received', @renderQuestion, this
+    @model?.on 'question-received', @onNewQuestion, this
     @model?.on 'question-marked',   @renderQuestionMark, this
     @model?.on 'change:scores',     @renderScores, this
     @model?.on 'change:state',      @onStateChange, this
     @model?.on 'change:scoreAssessment', @onAssessmentChange, this
-
-  onAssessmentChange: ->
-    console.log @model.get('scoreAssessment')
 
   scoreContextFor: (score) ->
     _.extend score, {isUsersTeam: score.team.id == @game.selectedTeam.id}
@@ -82,11 +88,41 @@ class App.Views.RoundView extends App.View
     @$('.question-result').html response
     _.delay (=> @$('.question-result').html('')), 2000
 
+  teamResult: ->
+    contexts = _.map @model.get('results').winning_scores, (score)=> @scoreContextFor(score)
+    return "lost" unless !!_.find(contexts, ((c)-> c.isUsersTeam))
+    return "draw" if contexts.length > 1
+    "win"
+
   renderRoundResults: ->
     @$el.html @resultsTemplate(@model.toJSON())
-    @$('.winners').append(@scoreTemplate(@scoreContextFor score)) for score in @model.get('results').winning_scores
+    result = switch @teamResult()
+      when "win" then 'Your Team Won!'
+      when "lost" then "Your Team Lost"
+      else 'Draw'
+
+    @$('.winning-teams').append "<h4>#{result}</h4>"
+    @$('.winning-teams').append(@scoreTemplate(@scoreContextFor score)) for score in @model.get('results').winning_scores
+    @$('.mvps').append @mvpTemplate(mvp) if mvp = @model.get('results').highest_player_score
+
+    if @teamResult() == "win"
+      @notifySound = new Audio("/audio/win.mp3")
+      @notifySound.play()
 
   onStateChange: ->
     return unless @model.get('state') == 'completed'
     @renderRoundResults()
 
+  onAssessmentChange: ->
+    console.log @model.get('scoreAssessment')
+    # if @model.get('scoreAssessment') == 'small-lead'
+
+  onNewQuestion: ->
+    @renderQuestion()
+    @notifySound = new Audio("/audio/click.mp3")
+    @notifySound.play()
+
+  onPlayAgain: (e) ->
+    e?.preventDefault()
+    e?.stopPropagation()
+    @game.joinRound()
