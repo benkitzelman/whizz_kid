@@ -1,4 +1,6 @@
 require 'singleton'
+require 'set'
+
 module WhizzKid
   class Game < BaseObservable
     include Singleton
@@ -24,7 +26,7 @@ module WhizzKid
 
     def round_for(subject)
       rounds.find do |r| 
-        r.subject['name'] == subject['name'] && r.subject['topics'] == subject['topics'] && r.subject['teams'] == subject['teams']
+        r.subject['name'] == subject['name'] && Set.new(r.subject['topics']) == Set.new(subject['topics']) && Set.new(r.subject['teams']) == Set.new(subject['teams'])
       end
     end
 
