@@ -1,5 +1,6 @@
 require 'bundler/capistrano'
 require 'rvm/capistrano'
+require 'capistrano_colors'
 
 set :user,              'ubuntu'
 set :application,       'whizz_kid'
@@ -120,7 +121,7 @@ cloud_stage :staging,
     set :server_name, 'staging.tms.playupdev.com:9999'
 end
 
-before 'deploy:restart', 'deploy:nginx:configure'
+before 'deploy:restart', 'deploy:nginx:conf'
 after  'deploy:restart', 'deploy:tag'
 
 namespace :deploy do
@@ -128,12 +129,12 @@ namespace :deploy do
   APP_ROLE         = {:roles => :app}
 
   after 'deploy:cold',
-    'deploy:nginx:configure', 'deploy:nginx:restart', 'deploy:varnish:configure', 'deploy:varnish:restart'
+    'deploy:nginx:conf', 'deploy:nginx:restart', 'deploy:varnish:conf', 'deploy:varnish:restart'
 
   # NOP default migrations recipes.
-  [:migrate, :migrations].each do |name|
-    task(name) {}
-  end
+  # [:migrate, :migrations].each do |name|
+  #   task(name) {}
+  # end
 
   desc 'restart server'
   task :restart, APP_RESTART_ROLE do
@@ -147,7 +148,7 @@ namespace :deploy do
 
   namespace :varnish do
     desc 'setup varnish config'
-    task :configure, APP_ROLE do
+    task :conf, APP_ROLE do
       base    = File.join(current_path, 'config/varnish')
       configs = {'varnish' => '/etc/default/varnish', 'default.vcl' => '/etc/varnish/default.vcl'}
 
@@ -166,7 +167,7 @@ namespace :deploy do
 
   namespace :nginx do
     desc 'install nginx configs'
-    task :configure, APP_ROLE do
+    task :conf, APP_ROLE do
       run  "cd #{current_path}/config/nginx && ln -sfT environments/#{stage} stage"
       sudo "cp #{current_path}/config/nginx/whizz_kid.conf /etc/nginx/sites-enabled/#{application}.conf"
     end
