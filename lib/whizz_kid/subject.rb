@@ -28,7 +28,7 @@ module WhizzKid
     end
 
     def title
-      'Trivia'
+      @data['title'] || 'Game Trivia'
     end
 
     def topics
