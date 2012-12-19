@@ -24,7 +24,7 @@ module WhizzKid
     def game_url
       team_param = teams.map {|t| "#{t[:id]}_#{t[:name]}" }.join('__')
       topics_param = topics.join('_')
-      "#{WhizzKid.settings.root_url}?name=Game%20Trivia&topics=#{URI.encode topics_param}&teams=#{URI.encode team_param}"
+      "#{WhizzKid.settings.root_url}?name=#{URI.encode title}&topics=#{URI.encode topics_param}&teams=#{URI.encode team_param}"
     end
 
     def title
