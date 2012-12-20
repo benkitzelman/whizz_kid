@@ -1,8 +1,9 @@
 # Manchester United F.C.
 - question: When was Manchester United F.C. founded?
-  - text:   1891
-  - text:   1878
-    answer: true
-  - text:   1921
-  - text:   1928
+  options:
+    - text:   1891
+    - text:   1878
+      answer: true
+    - text:   1921
+    - text:   1928
 
