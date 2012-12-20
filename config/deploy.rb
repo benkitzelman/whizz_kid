@@ -138,7 +138,7 @@ namespace :deploy do
 
   desc 'restart server'
   task :restart, APP_RESTART_ROLE do
-    run "cd #{current_path} && ./script/server -E #{stage} restart"
+    run "cd #{current_path} && ./script/server -E #{stage} restart && ./script/game_server restart"
   end
 
   desc 'start server'
