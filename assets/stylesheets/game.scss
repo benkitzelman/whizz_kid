@@ -1,6 +1,5 @@
 @import 'assets/stylesheets/base';
-@import 'assets/stylesheets/_mixins';
-
+@import 'assets/stylesheets/style';
 
 .game-view {
   padding: 20px;
@@ -26,10 +25,21 @@
   }
 
   .question-view {
+    position:     absolute;
+    top:          0;
+    left:         0;
+    width:        100%;
+    z-index:      -1;
 
     b {
-      font-weight: 600;
-      font-size:   20px;
+      @include gradient-vertical(rgb(73, 255, 104), rgb(42, 174, 71));
+      text-shadow: 1px 0px 2px 2px rgba(0,0,0,0.15);
+      display:      block;
+      padding:      110px 0 20px 0;
+      color:        white;
+      font-weight:  600;
+      font-size:    20px;
+      width:        100%;
     }
 
     .options {

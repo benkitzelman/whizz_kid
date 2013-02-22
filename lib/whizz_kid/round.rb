@@ -8,6 +8,11 @@ module WhizzKid
 
     attr_reader :subject, :scores, :current_question, :players, :teams
 
+    def self.can_service? subject
+      round = Round.new subject
+      !round.questions.nil? && !round.questions.empty?
+    end
+
     def initialize subject
       @subject = subject
       @players = []

@@ -3,6 +3,44 @@ $color-regular-text :     rgb(65,65,65);
 $color-regular-heading :  rgb(125,125,125);
 $color-background:        rgb(244,246, 239);
 
+@mixin radio-button() {
+  margin:  35px 0;
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  label {
+    @extend .animated;
+    display:    inline-block;
+    cursor:     pointer;
+    font-size:  20px;
+    line-height: 40px;
+    position:   relative;
+
+    &:after {
+      @include  box-shadow(1px 0px 5px 5px rgba(0,0,0,0.15));
+      content:        '';
+      display:        block;
+      width:          60px;
+      height:         60px;
+      position:       absolute;
+      top:            -10px;
+      left:           50%;
+      border-radius:  40px;
+      margin-left:    -30px;
+      background:     white;
+      z-index:        -1;
+    }
+
+    &.selected {
+      @extend .bounceIn;
+      color:      red;
+      font-size:  24px;
+    }
+  }
+}
+
 // Mixins.scss
 // Snippets of reusable CSS to develop faster and keep code readable
 // -----------------------------------------------------------------

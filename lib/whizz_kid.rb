@@ -19,15 +19,16 @@ module WhizzKid
 
     def start_game_server
       EventMachine.run {
-        @game = WhizzKid::Game.start(Channel.new)
+        @game = WhizzKid::Game.start
 
         EventMachine::WebSocket.start(:host => '0.0.0.0', :port => WhizzKid.settings.web_socket_port) do |ws|
 
           ws.onopen {
             begin
-              player = @game.player_connected ws
+              player = WhizzKid::Player.new(ws)
+              @game.add_player player
 
-              ws.onclose    { player.unsubscribe_all }
+              ws.onclose    { @game.remove_player player }
               ws.onmessage  {|msg| WhizzKid::Controllers::Game.new(@game, player).dispatch msg }
 
               player.send_message Presenters::GameUpdate.new(@game).as_hash('game:ready')
@@ -40,6 +41,5 @@ module WhizzKid
         end
       }
     end
-
   end # self
 end # WhizzKid

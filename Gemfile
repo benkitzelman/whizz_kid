@@ -20,8 +20,9 @@ gem 'rvm-capistrano'
 gem 'fog'
 gem 'thin'
 
-group :development, :test do
-  # gem 'debugger'
+group :test do
+  gem 'debugger'
+  gem 'rspec'
   gem 'jasmine'
   gem 'rack-asset-compiler'
 end

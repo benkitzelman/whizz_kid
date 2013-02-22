@@ -8,13 +8,13 @@ module WhizzKid
     STATE_STARTED = :started
     STATE_PLAYING = :playing
 
-    def self.start(channel)
-      instance.start channel
+    def self.start(channel = nil)
+      instance.start (channel || Channel.new)
     end
 
     def start(channel)
       @channel = channel
-      @state = STATE_STARTED
+      @state   = STATE_STARTED
 
       notify Presenters::GameUpdate.new(self).as_hash
       self
@@ -25,14 +25,13 @@ module WhizzKid
     end
 
     def round_for(subject)
-      rounds.find do |r| 
+      rounds.find do |r|
         r.subject['name'] == subject['name'] && Set.new(r.subject['topics']) == Set.new(subject['topics']) && Set.new(r.subject['teams']) == Set.new(subject['teams'])
       end
     end
 
     def can_service(subject)
-      round = Round.new(subject)
-      !round.questions.nil? && !round.questions.empty?
+      Round.can_service? subject
     end
 
     def join_or_create_round(subject, player, team)
@@ -51,11 +50,14 @@ module WhizzKid
       round
     end
 
-    def player_connected ws
-      player = WhizzKid::Player.new(ws)
-      player.channel_subscriptions << {channel: channel, sid: subscribe(ws)}
+    def add_player player
+      subscription = subscribe player.socket
+      player.channel_subscriptions << {channel: channel, sid: subscription}
       player
     end
 
+    def remove_player player
+      player.unsubscribe_all
+    end
   end
 end
