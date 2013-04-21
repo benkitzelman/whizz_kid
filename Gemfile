@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org' 
 
 gem 'rake'
 gem 'rack'
@@ -21,7 +21,7 @@ gem 'fog'
 gem 'thin'
 
 group :test do
-  gem 'debugger'
+  # gem 'debugger'
   gem 'rspec'
   gem 'jasmine'
   gem 'rack-asset-compiler'

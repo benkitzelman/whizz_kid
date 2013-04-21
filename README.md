@@ -28,4 +28,4 @@ the round's question set.
 
 NO TESTS
 ------------------
-Whoohoo! This was built at speed - tests were the first casualty... boooo.
+Whoohoo! This was built at speed - tests are few.
