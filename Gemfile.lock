@@ -59,7 +59,7 @@ GEM
       systemu (~> 2.5.0)
     mime-types (1.19)
     multi_json (1.5.0)
-    multi_xml (0.5.1)
+    multi_xml (0.6.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
